@@ -44,6 +44,7 @@ class LabelAccessory extends JLabel implements PropertyChangeListener {
         setPreferredSize(new Dimension(PREFERRED_WIDTH, PREFERRED_HEIGHT));
     }
 
+    @Override
     public void propertyChange(PropertyChangeEvent changeEvent) {
         String changeName = changeEvent.getPropertyName();
         if (changeName.equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)) {

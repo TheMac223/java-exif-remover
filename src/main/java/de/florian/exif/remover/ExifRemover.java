@@ -27,15 +27,14 @@ public class ExifRemover {
         JPEG;
 
         String regex() {
-            return "\\." + this.name();
+            return "\\\\." + this.name();
         }
-
         public static String getOrRegex() {
             return "(" + Arrays.stream(values()).map(Ext::regex).collect(Collectors.joining("|")) + ")";
         }
 
         public static String[] getNames() {
-            return Arrays.stream(values()).map(Ext::name).toArray(String[]::new);
+            return Arrays.stream(values()).map(Ext::name).toArray(size -> new String[size]);
         }
 
         public static String getExtensionDescription() {
@@ -48,10 +47,7 @@ public class ExifRemover {
 
     public Stream<File> traverseFile(File file, Predicate<? super File> filter) throws IOException {
         Predicate<? super File> fileFilter = Optional.of(filter).orElse((f) -> true);
-        return Files.walk(Paths.get(file.getPath()))
-                .filter(Files::isRegularFile)
-                .map(Path::toFile)
-                .filter(fileFilter);
+        return Files.walk(Paths.get(file.getPath())).filter(Files::isRegularFile).map(Path::toFile).filter(fileFilter);
     }
 
     public long count(File[] files, Predicate<? super File> filter) throws IOException {
@@ -89,6 +85,7 @@ public class ExifRemover {
     private void copyImageWithoutMetaData(File file, File outputFile) {
         try {
             BufferedImage image = ImageIO.read(file);
+
             if (image != null) {
                 Matcher imageEndingMatcher = imageEndingPattern.matcher(file.getPath());
                 if (imageEndingMatcher.find()) {
