@@ -27,7 +27,7 @@ public class ExifRemover {
         JPEG;
 
         String regex() {
-            return "\\\\." + this.name();
+            return "\\." + this.name();
         }
         public static String getOrRegex() {
             return "(" + Arrays.stream(values()).map(Ext::regex).collect(Collectors.joining("|")) + ")";
